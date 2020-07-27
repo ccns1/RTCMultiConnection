@@ -78,7 +78,7 @@ connection.socketURL = '/';
 // comment-out below line if you do not have your own socket.io server
 // connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
 
-connection.socketMessageEvent = 'one-to-one-demo';
+connection.socketMessageEvent = 'screen-sharing-demo';
 
 connection.session = {
     audio: true,
@@ -104,8 +104,8 @@ connection.iceServers = [{
 connection.videosContainer = document.getElementById('videos-container');
 connection.onstream = function(event) {
     var existing = document.getElementById(event.streamid);
-    if (existing && existing.parentNode) {
-        existing.parentNode.removeChild(existing);
+    if(existing && existing.parentNode) {
+      existing.parentNode.removeChild(existing);
     }
 
     event.mediaElement.removeAttribute('src');
@@ -123,17 +123,17 @@ connection.onstream = function(event) {
         video.setAttribute('playsinline', true);
     }
 
-    if (event.type === 'local') {
-        video.volume = 0;
-        try {
-            video.setAttributeNode(document.createAttribute('muted'));
-        } catch (e) {
-            video.setAttribute('muted', true);
-        }
+    if(event.type === 'local') {
+      video.volume = 0;
+      try {
+          video.setAttributeNode(document.createAttribute('muted'));
+      } catch (e) {
+          video.setAttribute('muted', false);
+      }
     }
     video.srcObject = event.stream;
 
-    var width = parseInt(connection.videosContainer.clientWidth / 3) - 20;
+    var width = innerWidth - 80;
     var mediaElement = getHTMLMediaElement(video, {
         title: event.userid,
         buttons: ['full-screen'],
@@ -148,17 +148,6 @@ connection.onstream = function(event) {
     }, 5000);
 
     mediaElement.id = event.streamid;
-
-    // to keep room-id in cache
-    localStorage.setItem(connection.socketMessageEvent, connection.sessionid);
-
-    if (event.type === 'local') {
-        connection.socket.on('disconnect', function() {
-            if (!connection.getAllParticipants().length) {
-                location.reload();
-            }
-        });
-    }
 };
 
 connection.onstreamended = function(event) {
