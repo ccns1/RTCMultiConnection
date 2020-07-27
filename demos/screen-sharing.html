@@ -101,7 +101,17 @@ connection.iceServers = [{
     ]
 }];
 
-connection.videosContainer = document.getElementById('videos-container');
+connection.videosContainer = document.addEventListener('DOMContentLoaded', () => {
+    const video = document.querySelector('#videos-container');
+
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => video.srcObject = stream)
+            .catch(err => console.log('Something went wrong: ' + err))
+    }
+});
+
+
 connection.onstream = function(event) {
     var existing = document.getElementById(event.streamid);
     if(existing && existing.parentNode) {
