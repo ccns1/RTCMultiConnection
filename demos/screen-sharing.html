@@ -81,6 +81,8 @@ connection.socketURL = '/';
 connection.socketMessageEvent = 'screen-sharing-demo';
                               
 connection.session = {
+    video: true,
+    audio: true,
     screen: true,
     oneway: true
 };
@@ -90,6 +92,16 @@ connection.sdpConstraints.mandatory = {
     OfferToReceiveVideo: true
 };
 
+connection.mediaConstraints = {
+    video: true,
+    audio: true
+};
+
+connection.addStream({
+    screen: true,
+    oneway: true
+}); 
+  
 // https://www.rtcmulticonnection.org/docs/iceServers/
 // use your own TURN-server here!
 connection.iceServers = [{
