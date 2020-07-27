@@ -81,8 +81,7 @@ connection.socketURL = '/';
 connection.socketMessageEvent = 'screen-sharing-demo';
                               
 connection.session = {
-    audio: true,
-    video: true,
+    screen: true,
     oneway: true
 };
 
@@ -102,17 +101,7 @@ connection.iceServers = [{
     ]
 }];
 
-connection.videosContainer = document.addEventListener('DOMContentLoaded', () => {
-    const video = document.querySelector('#videos-container');
-
-    if (navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => video.srcObject = stream)
-            .catch(err => console.log('Something went wrong: ' + err))
-    }
-});
-
-
+connection.videosContainer = document.getElementById('videos-container');
 connection.onstream = function(event) {
     var existing = document.getElementById(event.streamid);
     if(existing && existing.parentNode) {
@@ -121,7 +110,7 @@ connection.onstream = function(event) {
 
     event.mediaElement.removeAttribute('src');
     event.mediaElement.removeAttribute('srcObject');
-    event.mediaElement.muted = true;
+    event.mediaElement.muted = false;
     event.mediaElement.volume = 0;
 
     var video = document.createElement('video');
